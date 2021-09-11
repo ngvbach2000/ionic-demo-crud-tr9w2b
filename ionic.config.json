@@ -1,0 +1,8 @@
+{
+  "name": "ionic-demo-crud",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "react",
+  "id": "1166bc02"
+}
