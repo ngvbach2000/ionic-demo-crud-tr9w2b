@@ -19,4 +19,23 @@
 .trash-icon {
   font-size: 24px;
   color: red;
+  text-align: right;
+}
+
+.pencil-icon {
+  font-size: 24px;
+  color: teal;
+  text-align: right;
+  margin-left: 1.5px;
+}
+
+.image {
+  width: 5rem;
+  height: 5rem;
+  object-fit: cover;
+  object-position: center center;
+}
+
+.actionCol {
+  display: flex;
 }

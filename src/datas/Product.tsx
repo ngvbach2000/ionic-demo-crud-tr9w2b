@@ -1,7 +1,6 @@
 export interface Product {
   id: number;
-  name: string;
-  image: string;
-  quantity: number;
-  isDelete: boolean;
+  name: string | undefined;
+  image: string | undefined;
+  quantity: number | undefined;
 }
