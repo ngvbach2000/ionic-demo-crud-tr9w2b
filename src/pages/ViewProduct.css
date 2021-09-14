@@ -1,0 +1,22 @@
+.view-list {
+  margin: 10px;
+}
+
+.view-row {
+  border: 1px solid black;
+  display: flex;
+  align-items: center;
+}
+
+.view-col {
+  text-align: center;
+}
+
+.product-name {
+  word-wrap: break-word;
+}
+
+.trash-icon {
+  font-size: 24px;
+  color: red;
+}
