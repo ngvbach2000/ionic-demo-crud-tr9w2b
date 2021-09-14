@@ -12,14 +12,32 @@ import {
   IonText,
   IonTitle,
   IonToolbar,
+  useIonAlert,
 } from '@ionic/react';
 import { columns } from '../datas/datas';
 import './ViewProduct.css';
-import { products } from './../datas/datas';
-import { trashOutline, trashSharp } from 'ionicons/icons';
+import {
+  pencilOutline,
+  pencilSharp,
+  trashOutline,
+  trashSharp,
+} from 'ionicons/icons';
+import { Product } from './../datas/Product';
+import { Link } from 'react-router-dom';
 
-const ViewProduct: React.FC = () => {
+interface Props {
+  products: Product[];
+  setProducts: React.Dispatch<React.SetStateAction<Product[]>>;
+}
+
+const ViewProduct: React.FC<Props> = ({ products, setProducts }) => {
   const title = 'View Product';
+
+  const [present] = useIonAlert();
+
+  const deleteProduct = (id: number) => {
+    setProducts(products.filter((p) => p.id !== id));
+  };
 
   return (
     <IonPage>
@@ -45,6 +63,7 @@ const ViewProduct: React.FC = () => {
                 <IonCol
                   className='view-col'
                   size={index === 1 ? '5' : index === 3 ? '2' : ''}
+                  key={index}
                 >
                   {column}
                 </IonCol>
@@ -52,20 +71,42 @@ const ViewProduct: React.FC = () => {
           </IonRow>
           {products &&
             products.map((product) => (
-              <IonRow className='view-row'>
+              <IonRow className='view-row' key={product.id}>
                 <IonCol>
-                  <IonImg src={product.image} />
+                  <IonImg src={product.image} className='image' />
                 </IonCol>
                 <IonCol size='5'>
                   <IonText class='product-name'>{product.name}</IonText>
                 </IonCol>
                 <IonCol>{product.quantity}</IonCol>
-                <IonCol size='1.5'>
+                <IonCol size='2' className='actionCol'>
                   <IonIcon
                     className='trash-icon'
                     ios={trashSharp}
                     md={trashOutline}
+                    onClick={() => {
+                      present({
+                        cssClass: 'my-css',
+                        header: 'Delete',
+                        message: 'Do you want to delete this product?',
+                        buttons: [
+                          'Cancel',
+                          {
+                            text: 'Delete',
+                            handler: (d) => deleteProduct(product.id),
+                          },
+                        ],
+                        onDidDismiss: (e) => console.log('did dismiss'),
+                      });
+                    }}
                   />
+                  <Link to={`/update/${product.id}`}>
+                    <IonIcon
+                      className='pencil-icon'
+                      ios={pencilSharp}
+                      md={pencilOutline}
+                    />
+                  </Link>
                 </IonCol>
               </IonRow>
             ))}

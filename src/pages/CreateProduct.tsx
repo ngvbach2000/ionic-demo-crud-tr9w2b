@@ -7,20 +7,50 @@ import {
   IonPage,
   IonTitle,
   IonToolbar,
-  IonList,
   IonItem,
   IonInput,
-  IonLabel
+  IonLabel,
+  IonCard,
 } from '@ionic/react';
 import './CreateProduct.css';
 import React, { useState } from 'react';
+import { Product } from './../datas/Product';
+import { useHistory } from 'react-router';
 
-const CreateProduct: React.FC = () => {
+interface Props {
+  products: Product[];
+  setProducts: React.Dispatch<React.SetStateAction<Product[]>>;
+}
+
+const CreateProduct: React.FC<Props> = ({ products, setProducts }) => {
   const title = 'Create Product';
+
+  const history = useHistory();
 
   const [name, setName] = useState<string>();
   const [imageUrl, setImage] = useState<string>();
-  const [quantity, setQuantity] = useState<number>();
+  const [quantity, setQuantity] = useState<number | null>();
+
+  const handleCreate = () => {
+    if (!name || !imageUrl || !quantity) {
+      return;
+    }
+
+    setProducts([
+      {
+        id: Math.floor(Math.random() * 10),
+        name,
+        image: imageUrl,
+        quantity,
+      },
+      ...products,
+    ]);
+    setName('');
+    setImage('');
+    setQuantity(null);
+
+    history.push('/view');
+  };
 
   return (
     <IonPage>
@@ -34,25 +64,49 @@ const CreateProduct: React.FC = () => {
       </IonHeader>
 
       <IonContent>
-      <IonItem>
-            <IonLabel position="stacked" placeholder="Enter name of product">Name</IonLabel>
-            <IonInput value={name} placeholder="Enter name of product" onIonChange={e => setName(e.detail.value!)}> </IonInput>
+        <IonCard>
+          <IonItem>
+            <IonLabel position='floating' placeholder='Enter name of product'>
+              Name
+            </IonLabel>
+            <IonInput
+              onIonFocus={() => true}
+              value={name}
+              placeholder='Enter name of product'
+              onIonChange={(e) => setName(e.detail.value!)}
+            >
+              {' '}
+            </IonInput>
           </IonItem>
 
           <IonItem>
-            <IonLabel position="stacked">Image</IonLabel>
-            <IonInput value={imageUrl} placeholder="Enter image url" onIonChange={e => setImage(e.detail.value!)}> </IonInput>
+            <IonLabel position='floating'>Image</IonLabel>
+            <IonInput
+              value={imageUrl}
+              placeholder='Enter image url'
+              onIonChange={(e) => setImage(e.detail.value!)}
+            >
+              {' '}
+            </IonInput>
           </IonItem>
 
-        <IonList>
           <IonItem>
-          <IonLabel position="stacked">Quality</IonLabel>
-            <IonInput type="number" value={quantity} placeholder="Enter the quality" onIonChange={e => setQuantity(+e.detail.value!)}></IonInput>
+            <IonLabel position='floating'>Quality</IonLabel>
+            <IonInput
+              type='number'
+              value={quantity}
+              placeholder='Enter the quality'
+              onIonChange={(e) => setQuantity(+e.detail.value!)}
+            ></IonInput>
           </IonItem>
-        </IonList>
+        </IonCard>
+
+        <div className='contBtn'>
+          <IonButton className='btnCreate' onClick={handleCreate}>
+            Create Product
+          </IonButton>
+        </div>
       </IonContent>
-
-      <IonButton color="success">Create Product</IonButton>
     </IonPage>
   );
 };

@@ -2,7 +2,6 @@ import { IonApp, IonRouterOutlet, IonSplitPane } from '@ionic/react';
 import { IonReactRouter } from '@ionic/react-router';
 import { Redirect, Route } from 'react-router-dom';
 import Menu from './components/Menu';
-import Page from './pages/ViewProduct';
 
 /* Core CSS required for Ionic components to work properly */
 import '@ionic/react/css/core.css';
@@ -24,8 +23,13 @@ import '@ionic/react/css/display.css';
 import './theme/variables.css';
 import ViewProduct from './pages/ViewProduct';
 import CreateProduct from './pages/CreateProduct';
+import { productDatas } from './datas/datas';
+import { useState } from 'react';
+import UpdateProduct from './pages/UpdateProduct';
 
 const App: React.FC = () => {
+  const [products, setProducts] = useState(productDatas);
+
   return (
     <IonApp>
       <IonReactRouter>
@@ -36,10 +40,13 @@ const App: React.FC = () => {
               <Redirect to='/view' />
             </Route>
             <Route path='/view' exact={true}>
-              <ViewProduct />
+              <ViewProduct products={products} setProducts={setProducts} />
             </Route>
             <Route path='/create' exact={true}>
-              <CreateProduct />
+              <CreateProduct products={products} setProducts={setProducts} />
+            </Route>
+            <Route path='/update/:id' exact={true}>
+              <UpdateProduct products={products} setProducts={setProducts} />
             </Route>
           </IonRouterOutlet>
         </IonSplitPane>
