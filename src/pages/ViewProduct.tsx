@@ -41,7 +41,7 @@ const ViewProduct: React.FC<Props> = ({ products, setProducts }) => {
 
   return (
     <IonPage>
-      <IonHeader>
+      <IonHeader color='white'>
         <IonToolbar>
           <IonButtons slot='start'>
             <IonMenuButton />
@@ -50,12 +50,7 @@ const ViewProduct: React.FC<Props> = ({ products, setProducts }) => {
         </IonToolbar>
       </IonHeader>
 
-      <IonContent fullscreen>
-        <IonHeader collapse='condense'>
-          <IonToolbar>
-            <IonTitle size='large'>{title}</IonTitle>
-          </IonToolbar>
-        </IonHeader>
+      <IonContent>
         <IonGrid className='view-list'>
           <IonRow className='view-row' style={{ backgroundColor: '#fff0cc' }}>
             {columns &&
