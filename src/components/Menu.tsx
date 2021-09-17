@@ -33,7 +33,7 @@ const appPages: AppPage[] = [
   },
   {
     title: 'Create Product',
-    url: '/Create',
+    url: '/create',
     iosIcon: addCircleOutline,
     mdIcon: addCircleSharp,
   },

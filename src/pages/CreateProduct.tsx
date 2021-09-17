@@ -12,7 +12,7 @@ import {
   IonLabel,
 } from '@ionic/react';
 import './CreateProduct.css';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Product } from './../datas/Product';
 import { useHistory } from 'react-router';
 import { useForm } from 'react-hook-form';
@@ -26,18 +26,25 @@ interface Props {
 const CreateProduct: React.FC<Props> = ({ products, setProducts }) => {
   const title = 'Create Product';
 
+  const [defaultValue, setDefaultValue] = useState<any>(null);
+
+  useEffect(() => {
+    if (!defaultValue) {
+      setDefaultValue({
+        name: '',
+        imageUrl: '',
+        quantity: 0,
+      });
+    }
+  }, [defaultValue]);
+
   const validationSchema = Yup.object().shape({
     name: Yup.string().required('Product name is required'),
     imageUrl: Yup.string()
       .required('Product image is required')
-      .url('Please give valid image url')
-      .test(
-        'cont1',
-        'Please give valid image url',
-        (val) =>
-          /\.(gif|jpg|jpeg|tiff|png)$/i.test(val!) || val!.indexOf('images') > 0
-      ),
+      .url('Please give valid image url'),
     quantity: Yup.number()
+      .typeError('Please type number')
       .required('Quantity is required')
       .positive('Quantity must be positive')
       .integer('Quantity must be number')
@@ -47,15 +54,11 @@ const CreateProduct: React.FC<Props> = ({ products, setProducts }) => {
   const {
     register,
     handleSubmit,
-    reset,
     formState: { errors },
   } = useForm({
+    mode: 'onBlur',
     resolver: yupResolver(validationSchema),
-    defaultValues: {
-      name: '',
-      imageUrl: '',
-      quantity: '',
-    },
+    defaultValues: defaultValue,
   });
 
   const history = useHistory();
@@ -75,14 +78,15 @@ const CreateProduct: React.FC<Props> = ({ products, setProducts }) => {
 
     setProducts([
       {
-        id: Math.floor(Math.random() * 10),
+        id: Math.floor(Math.random() * (99999 - 1 + 1)) + 1,
         name,
         image: imageUrl,
         quantity,
       },
       ...products,
     ]);
-    reset();
+
+    setDefaultValue(null);
     history.push('/view');
   };
 
@@ -106,6 +110,10 @@ const CreateProduct: React.FC<Props> = ({ products, setProducts }) => {
             <IonInput
               type='text'
               placeholder='Enter name of product'
+              value={defaultValue?.name}
+              onIonChange={(e) =>
+                setDefaultValue({ ...defaultValue, name: e.detail.value })
+              }
               {...register('name')}
             />
           </IonItem>
@@ -116,6 +124,10 @@ const CreateProduct: React.FC<Props> = ({ products, setProducts }) => {
             <IonInput
               type='text'
               placeholder='Enter image url'
+              value={defaultValue?.imageUrl}
+              onIonChange={(e) =>
+                setDefaultValue({ ...defaultValue, imageUrl: e.detail.value })
+              }
               {...register('imageUrl')}
             />
           </IonItem>
@@ -125,14 +137,27 @@ const CreateProduct: React.FC<Props> = ({ products, setProducts }) => {
             <IonLabel position='floating'>Quality</IonLabel>
             <IonInput
               type='number'
-              placeholder='Enter the quality'
+              placeholder='Enter the quantity'
+              value={defaultValue?.quantity}
+              onIonChange={(e) =>
+                setDefaultValue({ ...defaultValue, quantity: +e.detail.value! })
+              }
               {...register('quantity')}
             />
           </IonItem>
           <p className='error-message'>{errors.quantity?.message}</p>
 
           <div className='contBtn'>
-            <IonButton expand='block' className='btnCreate' type='submit'>
+            <IonButton
+              expand='block'
+              className='btnCreate'
+              type='submit'
+              disabled={
+                defaultValue?.name === '' ||
+                defaultValue?.imageUrl === '' ||
+                defaultValue?.quantity === ''
+              }
+            >
               Create Product
             </IonButton>
           </div>

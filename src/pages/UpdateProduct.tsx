@@ -33,13 +33,7 @@ const UpdateProduct: React.FC<Props> = ({ products, setProducts }) => {
     name: Yup.string().required('Product name is required'),
     imageUrl: Yup.string()
       .required('Product image is required')
-      .url('Please give valid image url')
-      .test(
-        'cont',
-        'Please give valid image url',
-        (val) =>
-          /\.(gif|jpg|jpeg|tiff|png)$/i.test(val!) || val!.indexOf('images') > 0
-      ),
+      .url('Please give valid image url'),
     quantity: Yup.number()
       .required('Quantity is required')
       .positive('Quantity must be positive')
@@ -50,15 +44,15 @@ const UpdateProduct: React.FC<Props> = ({ products, setProducts }) => {
   const [product, setProduct] = useState<Product | null>();
 
   useEffect(() => {
-    !product && setProduct(products.find((p) => p.id === +id));
-  }, [id, product, products]);
+    setProduct(products.find((p) => p.id === +id));
+  }, [id, products]);
 
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm({
-    mode: 'all',
+    mode: 'onBlur',
     resolver: yupResolver(validationSchema),
   });
 
@@ -116,7 +110,7 @@ const UpdateProduct: React.FC<Props> = ({ products, setProducts }) => {
                   value={product.image}
                   placeholder='Enter image url'
                   onIonChange={(e) =>
-                    setProduct({ ...product, name: e.detail.value! })
+                    setProduct({ ...product, image: e.detail.value! })
                   }
                   {...register('imageUrl')}
                 >
@@ -140,7 +134,15 @@ const UpdateProduct: React.FC<Props> = ({ products, setProducts }) => {
               <p className='error-message'>{errors.quantity?.message}</p>
 
               <div className='contBtn'>
-                <IonButton className='btnCreate' type='submit'>
+                <IonButton
+                  className='btnCreate'
+                  type='submit'
+                  disabled={
+                    product.name === '' ||
+                    product.image === '' ||
+                    product.quantity === +''
+                  }
+                >
                   Update Product
                 </IonButton>
               </div>
