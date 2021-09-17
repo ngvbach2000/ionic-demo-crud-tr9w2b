@@ -6,3 +6,12 @@
   width: 100%;
   text-align: center;
 }
+
+.error-message {
+  color: red;
+  font-size: small;
+}
+
+.error-input {
+  border: 1px solid red;
+}

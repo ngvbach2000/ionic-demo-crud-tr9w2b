@@ -10,13 +10,14 @@ import {
   IonItem,
   IonInput,
   IonLabel,
-  IonCard,
 } from '@ionic/react';
 import './CreateProduct.css';
-import React, { useState } from 'react';
+import React from 'react';
 import { Product } from './../datas/Product';
 import { useHistory } from 'react-router';
-
+import { useForm } from 'react-hook-form';
+import * as Yup from 'yup';
+import { yupResolver } from '@hookform/resolvers/yup';
 interface Props {
   products: Product[];
   setProducts: React.Dispatch<React.SetStateAction<Product[]>>;
@@ -25,13 +26,49 @@ interface Props {
 const CreateProduct: React.FC<Props> = ({ products, setProducts }) => {
   const title = 'Create Product';
 
+  const validationSchema = Yup.object().shape({
+    name: Yup.string().required('Product name is required'),
+    imageUrl: Yup.string()
+      .required('Product image is required')
+      .url('Please give valid image url')
+      .test(
+        'cont1',
+        'Please give valid image url',
+        (val) =>
+          /\.(gif|jpg|jpeg|tiff|png)$/i.test(val!) || val!.indexOf('images') > 0
+      ),
+    quantity: Yup.number()
+      .required('Quantity is required')
+      .positive('Quantity must be positive')
+      .integer('Quantity must be number')
+      .min(1, 'Quantity must be higher than 1'),
+  });
+
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors },
+  } = useForm({
+    resolver: yupResolver(validationSchema),
+    defaultValues: {
+      name: '',
+      imageUrl: '',
+      quantity: '',
+    },
+  });
+
   const history = useHistory();
 
-  const [name, setName] = useState<string>();
-  const [imageUrl, setImage] = useState<string>();
-  const [quantity, setQuantity] = useState<number | null>();
-
-  const handleCreate = () => {
+  const handleCreate = ({
+    name,
+    imageUrl,
+    quantity,
+  }: {
+    name: string;
+    imageUrl: string;
+    quantity: number;
+  }) => {
     if (!name || !imageUrl || !quantity) {
       return;
     }
@@ -45,10 +82,7 @@ const CreateProduct: React.FC<Props> = ({ products, setProducts }) => {
       },
       ...products,
     ]);
-    setName('');
-    setImage('');
-    setQuantity(null);
-
+    reset();
     history.push('/view');
   };
 
@@ -64,48 +98,45 @@ const CreateProduct: React.FC<Props> = ({ products, setProducts }) => {
       </IonHeader>
 
       <IonContent>
-        <IonCard>
+        <form onSubmit={handleSubmit(handleCreate)}>
           <IonItem>
             <IonLabel position='floating' placeholder='Enter name of product'>
               Name
             </IonLabel>
             <IonInput
-              onIonFocus={() => true}
-              value={name}
+              type='text'
               placeholder='Enter name of product'
-              onIonChange={(e) => setName(e.detail.value!)}
-            >
-              {' '}
-            </IonInput>
+              {...register('name')}
+            />
           </IonItem>
+          <p className='error-message'>{errors.name?.message}</p>
 
           <IonItem>
             <IonLabel position='floating'>Image</IonLabel>
             <IonInput
-              value={imageUrl}
+              type='text'
               placeholder='Enter image url'
-              onIonChange={(e) => setImage(e.detail.value!)}
-            >
-              {' '}
-            </IonInput>
+              {...register('imageUrl')}
+            />
           </IonItem>
+          <p className='error-message'>{errors.imageUrl?.message}</p>
 
           <IonItem>
             <IonLabel position='floating'>Quality</IonLabel>
             <IonInput
               type='number'
-              value={quantity}
               placeholder='Enter the quality'
-              onIonChange={(e) => setQuantity(+e.detail.value!)}
-            ></IonInput>
+              {...register('quantity')}
+            />
           </IonItem>
-        </IonCard>
+          <p className='error-message'>{errors.quantity?.message}</p>
 
-        <div className='contBtn'>
-          <IonButton className='btnCreate' onClick={handleCreate}>
-            Create Product
-          </IonButton>
-        </div>
+          <div className='contBtn'>
+            <IonButton expand='block' className='btnCreate' type='submit'>
+              Create Product
+            </IonButton>
+          </div>
+        </form>
       </IonContent>
     </IonPage>
   );

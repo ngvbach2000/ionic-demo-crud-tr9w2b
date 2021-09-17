@@ -6,3 +6,13 @@
   width: 100%;
   text-align: center;
 }
+
+.error-message {
+  color: red;
+  font-size: small;
+  margin-left: 20px;
+}
+
+form {
+  margin: 10px;
+}

@@ -10,12 +10,14 @@ import {
   IonItem,
   IonInput,
   IonLabel,
-  IonCard,
 } from '@ionic/react';
-import './CreateProduct.css';
+import './UpdateProduct.css';
 import React, { useEffect, useState } from 'react';
 import { Product } from './../datas/Product';
 import { useHistory, useParams } from 'react-router';
+import { useForm } from 'react-hook-form';
+import * as Yup from 'yup';
+import { yupResolver } from '@hookform/resolvers/yup';
 
 interface Props {
   products: Product[];
@@ -27,25 +29,51 @@ const UpdateProduct: React.FC<Props> = ({ products, setProducts }) => {
 
   const { id } = useParams<any>();
 
-  const history = useHistory();
+  const validationSchema = Yup.object().shape({
+    name: Yup.string().required('Product name is required'),
+    imageUrl: Yup.string()
+      .required('Product image is required')
+      .url('Please give valid image url')
+      .test(
+        'cont',
+        'Please give valid image url',
+        (val) =>
+          /\.(gif|jpg|jpeg|tiff|png)$/i.test(val!) || val!.indexOf('images') > 0
+      ),
+    quantity: Yup.number()
+      .required('Quantity is required')
+      .positive('Quantity must be positive')
+      .integer('Quantity must be number')
+      .min(1, 'Quantity must be higher than 1'),
+  });
 
-  const [product, setProduct] = useState<Product>();
+  const [product, setProduct] = useState<Product | null>();
 
   useEffect(() => {
-    setProduct(products.find((product) => product.id === +id));
-  }, [id, products]);
+    !product && setProduct(products.find((p) => p.id === +id));
+  }, [id, product, products]);
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({
+    mode: 'all',
+    resolver: yupResolver(validationSchema),
+  });
+
+  const history = useHistory();
 
   const handleUpdate = () => {
     if (!product) {
       return;
     }
 
-    const index = products.findIndex((p) => p.id === product.id);
+    const index = products.findIndex((p) => p.id === product!.id);
     products[index] = product;
-    console.log(products);
 
     setProducts([...products]);
-
+    setProduct(null);
     history.push('/view');
   };
 
@@ -63,7 +91,7 @@ const UpdateProduct: React.FC<Props> = ({ products, setProducts }) => {
       <IonContent>
         {product && (
           <>
-            <IonCard>
+            <form onSubmit={handleSubmit(handleUpdate)}>
               <IonItem>
                 <IonLabel
                   position='floating'
@@ -72,48 +100,51 @@ const UpdateProduct: React.FC<Props> = ({ products, setProducts }) => {
                   Name
                 </IonLabel>
                 <IonInput
-                  onIonFocus={() => true}
-                  value={product!.name}
+                  value={product.name}
                   placeholder='Enter name of product'
                   onIonChange={(e) =>
                     setProduct({ ...product, name: e.detail.value! })
                   }
-                >
-                  {' '}
-                </IonInput>
+                  {...register('name')}
+                />
               </IonItem>
+              <p className='error-message'>{errors.name?.message}</p>
 
               <IonItem>
                 <IonLabel position='floating'>Image</IonLabel>
                 <IonInput
-                  value={product!.image}
+                  value={product.image}
                   placeholder='Enter image url'
                   onIonChange={(e) =>
-                    setProduct({ ...product, image: e.detail.value! })
+                    setProduct({ ...product, name: e.detail.value! })
                   }
+                  {...register('imageUrl')}
                 >
                   {' '}
                 </IonInput>
               </IonItem>
+              <p className='error-message'>{errors.imageUrl?.message}</p>
 
               <IonItem>
                 <IonLabel position='floating'>Quality</IonLabel>
                 <IonInput
                   type='number'
-                  value={product!.quantity}
+                  value={product.quantity}
                   placeholder='Enter the quality'
                   onIonChange={(e) =>
                     setProduct({ ...product, quantity: +e.detail.value! })
                   }
+                  {...register('quantity')}
                 ></IonInput>
               </IonItem>
-            </IonCard>
+              <p className='error-message'>{errors.quantity?.message}</p>
 
-            <div className='contBtn'>
-              <IonButton className='btnCreate' onClick={handleUpdate}>
-                Update Product
-              </IonButton>
-            </div>
+              <div className='contBtn'>
+                <IonButton className='btnCreate' type='submit'>
+                  Update Product
+                </IonButton>
+              </div>
+            </form>
           </>
         )}
       </IonContent>
