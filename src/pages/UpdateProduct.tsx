@@ -33,7 +33,10 @@ const UpdateProduct: React.FC<Props> = ({ products, setProducts }) => {
     name: Yup.string().required('Product name is required'),
     imageUrl: Yup.string()
       .required('Product image is required')
-      .url('Please give valid image url'),
+      .matches(
+        /[-a-zA-Z0-9@:%_\+.~#?&//=]{2,256}\.[a-z]{2,4}\b(\/[-a-zA-Z0-9@:%_\+.~#?&//=]*)?/gi,
+        'Please give valid image url'
+      ),
     quantity: Yup.number()
       .required('Quantity is required')
       .positive('Quantity must be positive')
@@ -44,7 +47,12 @@ const UpdateProduct: React.FC<Props> = ({ products, setProducts }) => {
   const [product, setProduct] = useState<Product | null>();
 
   useEffect(() => {
-    setProduct(products.find((p) => p.id === +id));
+    const productGet = products.find((p) => p.id === +id);
+    if (!productGet) {
+      history.replace('/view');
+    }
+
+    setProduct(productGet);
   }, [id, products]);
 
   const {
@@ -68,7 +76,7 @@ const UpdateProduct: React.FC<Props> = ({ products, setProducts }) => {
 
     setProducts([...products]);
     setProduct(null);
-    history.push('/view');
+    history.replace('/view');
   };
 
   return (

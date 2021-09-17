@@ -42,7 +42,10 @@ const CreateProduct: React.FC<Props> = ({ products, setProducts }) => {
     name: Yup.string().required('Product name is required'),
     imageUrl: Yup.string()
       .required('Product image is required')
-      .url('Please give valid image url'),
+      .matches(
+        /[-a-zA-Z0-9@:%_\+.~#?&//=]{2,256}\.[a-z]{2,4}\b(\/[-a-zA-Z0-9@:%_\+.~#?&//=]*)?/gi,
+        'Please give valid image url'
+      ),
     quantity: Yup.number()
       .typeError('Please type number')
       .required('Quantity is required')
@@ -87,7 +90,7 @@ const CreateProduct: React.FC<Props> = ({ products, setProducts }) => {
     ]);
 
     setDefaultValue(null);
-    history.push('/view');
+    history.replace('/view');
   };
 
   return (

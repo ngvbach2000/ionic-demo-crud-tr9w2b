@@ -48,6 +48,7 @@ const App: React.FC = () => {
             <Route path='/update/:id' exact={true}>
               <UpdateProduct products={products} setProducts={setProducts} />
             </Route>
+            <Route component={ViewProduct} />
           </IonRouterOutlet>
         </IonSplitPane>
       </IonReactRouter>
