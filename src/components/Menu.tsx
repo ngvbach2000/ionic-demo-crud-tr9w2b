@@ -54,7 +54,7 @@ const Menu: React.FC = () => {
                     location.pathname === appPage.url ? 'selected' : ''
                   }
                   routerLink={appPage.url}
-                  routerDirection='none'
+                  routerDirection='root'
                   lines='none'
                   detail={false}
                 >

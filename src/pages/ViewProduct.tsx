@@ -24,6 +24,7 @@ import {
 } from 'ionicons/icons';
 import { Product } from './../datas/Product';
 import { Link } from 'react-router-dom';
+import { useHistory } from 'react-router';
 
 interface Props {
   products: Product[];
@@ -33,10 +34,13 @@ interface Props {
 const ViewProduct: React.FC<Props> = ({ products, setProducts }) => {
   const title = 'View Product';
 
+  const history = useHistory();
+
   const [present] = useIonAlert();
 
   const deleteProduct = (id: number) => {
     setProducts(products.filter((p) => p.id !== id));
+    history.replace('/view');
   };
 
   return (
