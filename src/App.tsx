@@ -29,6 +29,7 @@ import UpdateProduct from './pages/UpdateProduct';
 
 const App: React.FC = () => {
   const [products, setProducts] = useState(productDatas);
+  const [isUpdate, setIsUpdate] = useState(false);
 
   return (
     <IonApp>
@@ -40,13 +41,18 @@ const App: React.FC = () => {
               <Redirect to='/view' />
             </Route>
             <Route path='/view' exact={true}>
-              <ViewProduct products={products} setProducts={setProducts} />
+              <ViewProduct
+                products={products}
+                setProducts={setProducts}
+                isUpdate={isUpdate}
+                setIsUpdate={setIsUpdate}
+              />
             </Route>
             <Route path='/create' exact={true}>
               <CreateProduct products={products} setProducts={setProducts} />
             </Route>
             <Route path='/update/:id' exact={true}>
-              <UpdateProduct products={products} setProducts={setProducts} />
+              <UpdateProduct products={products} setProducts={setProducts} setIsUpdate={setIsUpdate} />
             </Route>
             <Route component={ViewProduct} />
           </IonRouterOutlet>
