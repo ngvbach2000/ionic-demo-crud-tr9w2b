@@ -22,9 +22,10 @@ import { yupResolver } from '@hookform/resolvers/yup';
 interface Props {
   products: Product[];
   setProducts: React.Dispatch<React.SetStateAction<Product[]>>;
+  setIsUpdate: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const UpdateProduct: React.FC<Props> = ({ products, setProducts }) => {
+const UpdateProduct: React.FC<Props> = ({ products, setProducts, setIsUpdate }) => {
   const title = 'Update Product';
 
   const { id } = useParams<any>();
@@ -76,6 +77,7 @@ const UpdateProduct: React.FC<Props> = ({ products, setProducts }) => {
 
     setProducts([...products]);
     setProduct(null);
+    setIsUpdate(true);
     history.replace('/view');
   };
 
@@ -95,18 +97,13 @@ const UpdateProduct: React.FC<Props> = ({ products, setProducts }) => {
           <>
             <form onSubmit={handleSubmit(handleUpdate)}>
               <IonItem>
-                <IonLabel
-                  position='floating'
-                  placeholder='Enter name of product'
-                >
+                <IonLabel position='floating' placeholder='Enter name of product'>
                   Name
                 </IonLabel>
                 <IonInput
                   value={product.name}
                   placeholder='Enter name of product'
-                  onIonChange={(e) =>
-                    setProduct({ ...product, name: e.detail.value! })
-                  }
+                  onIonChange={(e) => setProduct({ ...product, name: e.detail.value! })}
                   {...register('name')}
                 />
               </IonItem>
@@ -117,9 +114,7 @@ const UpdateProduct: React.FC<Props> = ({ products, setProducts }) => {
                 <IonInput
                   value={product.image}
                   placeholder='Enter image url'
-                  onIonChange={(e) =>
-                    setProduct({ ...product, image: e.detail.value! })
-                  }
+                  onIonChange={(e) => setProduct({ ...product, image: e.detail.value! })}
                   {...register('imageUrl')}
                 >
                   {' '}
@@ -133,9 +128,7 @@ const UpdateProduct: React.FC<Props> = ({ products, setProducts }) => {
                   type='number'
                   value={product.quantity}
                   placeholder='Enter the quality'
-                  onIonChange={(e) =>
-                    setProduct({ ...product, quantity: +e.detail.value! })
-                  }
+                  onIonChange={(e) => setProduct({ ...product, quantity: +e.detail.value! })}
                   {...register('quantity')}
                 ></IonInput>
               </IonItem>
@@ -145,11 +138,7 @@ const UpdateProduct: React.FC<Props> = ({ products, setProducts }) => {
                 <IonButton
                   className='btnCreate'
                   type='submit'
-                  disabled={
-                    product.name === '' ||
-                    product.image === '' ||
-                    product.quantity === +''
-                  }
+                  disabled={product.name === '' || product.image === '' || product.quantity === +''}
                 >
                   Update Product
                 </IonButton>
