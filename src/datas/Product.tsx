@@ -3,4 +3,5 @@ export interface Product {
   name: string | undefined;
   image: string | undefined;
   quantity: number | undefined;
+  price: number | undefined;
 }

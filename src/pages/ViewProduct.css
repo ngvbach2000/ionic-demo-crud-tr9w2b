@@ -14,12 +14,18 @@
 
 .product-name {
   word-wrap: break-word;
+  font-size: 17px;
+  font-weight: 600;
 }
 
 .trash-icon {
   font-size: 24px;
   color: red;
   text-align: right;
+}
+
+.btn {
+  font-size: 14px;
 }
 
 .pencil-icon {
@@ -29,11 +35,38 @@
   margin-left: 1.5px;
 }
 
+.card-container {
+  margin: 15px;
+  border-radius: 15px;
+}
+
+.row-container {
+  width: 100%;
+}
+
+.flex-col {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.flex-row {
+  flex-direction: row;
+  justify-content: end;
+}
+
+.justity-center {
+  justify-content: center;
+}
+
 .image {
   width: 5rem;
   height: 5rem;
   object-fit: cover;
   object-position: center center;
+  border-radius: 10px !important;
+  overflow: hidden;
+  border: 2px solid var(--ion-color-new);
 }
 
 .actionCol {
@@ -42,7 +75,7 @@
 
 .search-container {
   display: flex;
-  margin: 35px 0 15px 0;
+  margin: 15px 0 15px 0;
   align-items: center;
 }
 
@@ -60,18 +93,19 @@
   list-style: none;
   outline: none;
   justify-content: flex-end;
-  margin: 15px;
+  margin: 25px 15px 0 0;
 }
 .pagination > .active > a {
-  background-color: #468add;
-  border-color: #468add;
-  color: #fff;
+  background-color: var(--ion-color-new);
+  border-color: var(--ion-color-new);
+  color: white;
 }
 .pagination > li > a {
-  border: 1px solid #468add;
+  border: 1px solid var(--ion-color-new);
   padding: 5px 10px;
   outline: none;
   cursor: pointer;
+  padding: 9px;
 }
 .pagination > .active > a,
 .pagination > .active > span,
@@ -79,17 +113,21 @@
 .pagination > .active > span:hover,
 .pagination > .active > a:focus,
 .pagination > .active > span:focus {
-  background-color: #468add;
-  border-color: #468add;
+  background-color: var(--ion-color-new);
+  border-color: var(--ion-color-new);
   outline: none;
 }
 .pagination > li > a,
 .pagination > li > span {
-  color: #468add;
+  color: var(--ion-color-new);
 }
 .pagination > li:first-child > a,
 .pagination > li:first-child > span,
 .pagination > li:last-child > a,
 .pagination > li:last-child > span {
   border-radius: unset;
+}
+
+.searchbar-input-container {
+  --border-radius: 8px;
 }

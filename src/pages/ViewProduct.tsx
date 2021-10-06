@@ -1,24 +1,24 @@
 import {
   IonButton,
   IonButtons,
+  IonCard,
   IonCol,
   IonContent,
   IonGrid,
   IonHeader,
-  IonIcon,
   IonImg,
+  IonItem,
   IonMenuButton,
   IonPage,
   IonRow,
   IonSearchbar,
   IonText,
+  IonThumbnail,
   IonTitle,
   IonToolbar,
   useIonAlert,
 } from '@ionic/react';
-import { columns } from '../datas/datas';
 import './ViewProduct.css';
-import { pencilOutline, pencilSharp, trashOutline, trashSharp } from 'ionicons/icons';
 import { Product } from './../datas/Product';
 import { Link } from 'react-router-dom';
 import { useHistory } from 'react-router';
@@ -90,8 +90,8 @@ const ViewProduct: React.FC<Props> = ({ products, setProducts, isUpdate, setIsUp
 
   return (
     <IonPage>
-      <IonHeader color='white'>
-        <IonToolbar>
+      <IonHeader>
+        <IonToolbar color='new'>
           <IonButtons slot='start'>
             <IonMenuButton />
           </IonButtons>
@@ -113,64 +113,68 @@ const ViewProduct: React.FC<Props> = ({ products, setProducts, isUpdate, setIsUp
             placeholder='Search product'
             className='search-bar'
           ></IonSearchbar>
-          <IonButton color='primary' onClick={searchData} className='btn-search'>
+          <IonButton color='new' onClick={searchData} className='btn-search'>
             Search
           </IonButton>
         </div>
 
-        <IonGrid className='view-list'>
-          <IonRow className='view-row' style={{ backgroundColor: '#fff0cc' }}>
-            {columns &&
-              columns.map((column, index) => (
-                <IonCol className='view-col' size={index === 1 ? '5' : index === 3 ? '2' : ''} key={index}>
-                  {column}
-                </IonCol>
-              ))}
-          </IonRow>
-          {data &&
-            data.map((product) => (
-              <IonRow className='view-row' key={product.id}>
-                <IonCol>
-                  <IonImg src={product.image} className='image' />
-                </IonCol>
-                <IonCol size='5'>
-                  <IonText class='product-name'>{product.name}</IonText>
-                </IonCol>
-                <IonCol>{product.quantity}</IonCol>
-                <IonCol size='2' className='actionCol'>
-                  <IonIcon
-                    className='trash-icon'
-                    ios={trashSharp}
-                    md={trashOutline}
-                    onClick={() => {
-                      present({
-                        cssClass: 'my-css',
-                        header: 'Delete',
-                        message: 'Do you want to delete this product?',
-                        buttons: [
-                          'Cancel',
-                          {
-                            text: 'Delete',
-                            handler: (d) => {
-                              deleteProduct(product.id);
-                              setCurrentPage(0);
-                              setOffset(0 * perPage);
-                              setSearchText('');
-                            },
-                          },
-                        ],
-                        onDidDismiss: (e) => console.log('did dismiss'),
-                      });
-                    }}
-                  />
-                  <Link to={`/update/${product.id}`}>
-                    <IonIcon className='pencil-icon' ios={pencilSharp} md={pencilOutline} />
-                  </Link>
-                </IonCol>
-              </IonRow>
-            ))}
-          {data.length === 0 && <p>No results found</p>}
-        </IonGrid>
+        {data &&
+          data.map((product) => (
+            <IonCard key={product.id} className='card-container'>
+              <IonItem className='item-card'>
+                <IonGrid>
+                  <IonRow className='row-container'>
+                    <IonCol>
+                      <IonImg src={product.image} className='image' />
+                    </IonCol>
+                    <IonCol className='flex flex-col ion-align-self-start' size='8'>
+                      <IonText class='product-name'>{product.name}</IonText>
+                      <div className='flex'>
+                        <IonText style={{ marginRight: '15px', fontSize: '14px' }}>
+                          Quantity: {product.quantity}
+                        </IonText>
+                        <IonText style={{ fontSize: '14px' }}>Price: {product.price}</IonText>
+                      </div>
+                      <div className='flex flex-row'>
+                        <Link to={`/update/${product.id}`}>
+                          <IonButton color='edt' className='btn'>
+                            Edit
+                          </IonButton>
+                        </Link>
+                        <IonButton
+                          color='del'
+                          className='btn'
+                          onClick={() => {
+                            present({
+                              cssClass: 'my-css',
+                              header: 'Delete',
+                              message: 'Do you want to delete this product?',
+                              buttons: [
+                                'Cancel',
+                                {
+                                  text: 'Delete',
+                                  handler: (d) => {
+                                    deleteProduct(product.id);
+                                    setCurrentPage(0);
+                                    setOffset(0 * perPage);
+                                    setSearchText('');
+                                  },
+                                },
+                              ],
+                              onDidDismiss: (e) => console.log('did dismiss'),
+                            });
+                          }}
+                        >
+                          Delete
+                        </IonButton>
+                      </div>
+                    </IonCol>
+                  </IonRow>
+                </IonGrid>
+              </IonItem>
+            </IonCard>
+          ))}
+        {data.length === 0 && <p>No results found</p>}
         {data.length !== 0 && (
           <ReactPaginate
             previousLabel={'prev'}
@@ -183,6 +187,7 @@ const ViewProduct: React.FC<Props> = ({ products, setProducts, isUpdate, setIsUp
             onPageChange={handlePageChange}
             containerClassName={'pagination'}
             activeClassName={'active'}
+            forcePage={currentPage}
           />
         )}
       </IonContent>
