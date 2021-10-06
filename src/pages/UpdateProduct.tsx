@@ -10,6 +10,7 @@ import {
   IonItem,
   IonInput,
   IonLabel,
+  IonBackButton,
 } from '@ionic/react';
 import './UpdateProduct.css';
 import React, { useEffect, useState } from 'react';
@@ -84,9 +85,9 @@ const UpdateProduct: React.FC<Props> = ({ products, setProducts, setIsUpdate }) 
   return (
     <IonPage>
       <IonHeader>
-        <IonToolbar>
+        <IonToolbar color='new'>
           <IonButtons slot='start'>
-            <IonMenuButton />
+            <IonBackButton text='' />
           </IonButtons>
           <IonTitle>{title}</IonTitle>
         </IonToolbar>
@@ -134,8 +135,22 @@ const UpdateProduct: React.FC<Props> = ({ products, setProducts, setIsUpdate }) 
               </IonItem>
               <p className='error-message'>{errors.quantity?.message}</p>
 
+              <IonItem>
+                <IonLabel position='floating'>Price</IonLabel>
+                <IonInput
+                  type='number'
+                  placeholder='Enter the price'
+                  value={product.price}
+                  onIonChange={(e) => setProduct({ ...product, price: +e.detail.value! })}
+                  {...register('price')}
+                />
+              </IonItem>
+              <p className='error-message'>{errors.price?.message}</p>
+
               <div className='contBtn'>
                 <IonButton
+                  color='new'
+                  expand='block'
                   className='btnCreate'
                   type='submit'
                   disabled={product.name === '' || product.image === '' || product.quantity === +''}

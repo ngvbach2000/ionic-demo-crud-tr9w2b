@@ -1,20 +1,7 @@
-import {
-  IonContent,
-  IonIcon,
-  IonItem,
-  IonLabel,
-  IonList,
-  IonMenu,
-  IonMenuToggle,
-} from '@ionic/react';
+import { IonContent, IonIcon, IonItem, IonLabel, IonList, IonMenu, IonMenuToggle } from '@ionic/react';
 
 import { useLocation } from 'react-router-dom';
-import {
-  addCircleOutline,
-  addCircleSharp,
-  bagHandleOutline,
-  bagHandleSharp,
-} from 'ionicons/icons';
+import { addCircleOutline, addCircleSharp, bagHandleOutline, bagHandleSharp } from 'ionicons/icons';
 import './Menu.css';
 
 interface AppPage {
@@ -50,19 +37,13 @@ const Menu: React.FC = () => {
             return (
               <IonMenuToggle key={index} autoHide={false}>
                 <IonItem
-                  className={
-                    location.pathname === appPage.url ? 'selected' : ''
-                  }
+                  className={location.pathname === appPage.url ? 'selected' : ''}
                   routerLink={appPage.url}
                   routerDirection='root'
                   lines='none'
                   detail={false}
                 >
-                  <IonIcon
-                    slot='start'
-                    ios={appPage.iosIcon}
-                    md={appPage.mdIcon}
-                  />
+                  <IonIcon slot='start' ios={appPage.iosIcon} md={appPage.mdIcon} />
                   <IonLabel>{appPage.title}</IonLabel>
                 </IonItem>
               </IonMenuToggle>

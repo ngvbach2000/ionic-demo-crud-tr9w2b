@@ -70,12 +70,14 @@ const CreateProduct: React.FC<Props> = ({ products, setProducts }) => {
     name,
     imageUrl,
     quantity,
+    price,
   }: {
     name: string;
     imageUrl: string;
     quantity: number;
+    price: number;
   }) => {
-    if (!name || !imageUrl || !quantity) {
+    if (!name || !imageUrl || !quantity || !price) {
       return;
     }
 
@@ -85,6 +87,7 @@ const CreateProduct: React.FC<Props> = ({ products, setProducts }) => {
         name,
         image: imageUrl,
         quantity,
+        price,
       },
       ...products,
     ]);
@@ -107,16 +110,12 @@ const CreateProduct: React.FC<Props> = ({ products, setProducts }) => {
       <IonContent>
         <form onSubmit={handleSubmit(handleCreate)}>
           <IonItem>
-            <IonLabel position='floating' placeholder='Enter name of product'>
-              Name
-            </IonLabel>
+            <IonLabel position='floating'>Name</IonLabel>
             <IonInput
               type='text'
               placeholder='Enter name of product'
               value={defaultValue?.name}
-              onIonChange={(e) =>
-                setDefaultValue({ ...defaultValue, name: e.detail.value })
-              }
+              onIonChange={(e) => setDefaultValue({ ...defaultValue, name: e.detail.value })}
               {...register('name')}
             />
           </IonItem>
@@ -128,9 +127,7 @@ const CreateProduct: React.FC<Props> = ({ products, setProducts }) => {
               type='text'
               placeholder='Enter image url'
               value={defaultValue?.imageUrl}
-              onIonChange={(e) =>
-                setDefaultValue({ ...defaultValue, imageUrl: e.detail.value })
-              }
+              onIonChange={(e) => setDefaultValue({ ...defaultValue, imageUrl: e.detail.value })}
               {...register('imageUrl')}
             />
           </IonItem>
@@ -142,24 +139,31 @@ const CreateProduct: React.FC<Props> = ({ products, setProducts }) => {
               type='number'
               placeholder='Enter the quantity'
               value={defaultValue?.quantity}
-              onIonChange={(e) =>
-                setDefaultValue({ ...defaultValue, quantity: +e.detail.value! })
-              }
+              onIonChange={(e) => setDefaultValue({ ...defaultValue, quantity: +e.detail.value! })}
               {...register('quantity')}
             />
           </IonItem>
           <p className='error-message'>{errors.quantity?.message}</p>
 
+          <IonItem>
+            <IonLabel position='floating'>Price</IonLabel>
+            <IonInput
+              type='number'
+              placeholder='Enter the price'
+              value={defaultValue?.price}
+              onIonChange={(e) => setDefaultValue({ ...defaultValue, price: +e.detail.value! })}
+              {...register('price')}
+            />
+          </IonItem>
+          <p className='error-message'>{errors.price?.message}</p>
+
           <div className='contBtn'>
             <IonButton
+              color='new'
               expand='block'
               className='btnCreate'
               type='submit'
-              disabled={
-                defaultValue?.name === '' ||
-                defaultValue?.imageUrl === '' ||
-                defaultValue?.quantity === ''
-              }
+              disabled={defaultValue?.name === '' || defaultValue?.imageUrl === '' || defaultValue?.quantity === ''}
             >
               Create Product
             </IonButton>
