@@ -1,7 +1,18 @@
-import { IonContent, IonIcon, IonItem, IonLabel, IonList, IonMenu, IonMenuToggle } from '@ionic/react';
+import {
+  IonContent,
+  IonHeader,
+  IonIcon,
+  IonItem,
+  IonLabel,
+  IonList,
+  IonMenu,
+  IonMenuToggle,
+  IonTitle,
+  IonToolbar,
+} from '@ionic/react';
 
 import { useLocation } from 'react-router-dom';
-import { addCircleOutline, addCircleSharp, bagHandleOutline, bagHandleSharp } from 'ionicons/icons';
+import { addCircleOutline, addCircleSharp, bagHandleOutline, bagHandleSharp, logoIonic } from 'ionicons/icons';
 import './Menu.css';
 
 interface AppPage {
@@ -30,7 +41,16 @@ const Menu: React.FC = () => {
   const location = useLocation();
 
   return (
-    <IonMenu contentId='main' type='overlay'>
+    <IonMenu side='start' contentId='main' type='overlay'>
+      <IonHeader>
+        <IonToolbar color='new'>
+          <IonTitle slot='start'>
+            <span className='flex'>
+              <IonIcon icon={logoIonic} style={{ marginRight: '5px' }} /> Ionic Framework Demo
+            </span>
+          </IonTitle>
+        </IonToolbar>
+      </IonHeader>
       <IonContent>
         <IonList id='inbox-list'>
           {appPages.map((appPage, index) => {
