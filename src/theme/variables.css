@@ -75,12 +75,12 @@ http://ionicframework.com/docs/theming/ */
   --ion-color-light-shade: #d7d8da;
   --ion-color-light-tint: #f5f6f9;
 
-  --ion-color-new: #69bb7b;
-  --ion-color-new-rgb: 105, 187, 123;
+  --ion-color-new: #3579f2;
+  --ion-color-new-rgb: 53, 121, 242;
   --ion-color-new-contrast: #ffffff;
   --ion-color-new-contrast-rgb: 255, 255, 255;
-  --ion-color-new-shade: #5ca56c;
-  --ion-color-new-tint: #78c288;
+  --ion-color-new-shade: #2f6ad5;
+  --ion-color-new-tint: #4986f3;
 
   --ion-color-del: #ff7070;
   --ion-color-del-rgb: 255, 112, 112;
@@ -126,4 +126,9 @@ http://ionicframework.com/docs/theming/ */
 
 ion-item.item-has-focus > ion-label {
   color: var(--ion-color-new) !important;
+}
+
+.flex {
+  display: flex;
+  align-items: center;
 }
