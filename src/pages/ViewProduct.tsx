@@ -23,7 +23,6 @@ import {
   useIonAlert,
   useIonLoading,
   useIonToast,
-  useIonViewDidLeave,
   useIonViewWillEnter,
 } from '@ionic/react';
 import './ViewProduct.css';

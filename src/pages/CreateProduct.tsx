@@ -184,7 +184,7 @@ const CreateProduct: React.FC<Props> = ({ products, setProducts }) => {
 
             <IonItem>
               <IonLabel position='floating'>
-                Quality:<IonText color='danger'>*</IonText>
+                Quantity:<IonText color='danger'>*</IonText>
               </IonLabel>
               <IonInput
                 type='number'
